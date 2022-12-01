@@ -1,6 +1,6 @@
 package web.dao;
 
-
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import web.model.User;
 import javax.persistence.EntityManager;
@@ -17,6 +17,7 @@ public class UserDAOImp implements UserDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<User> listUsers() {
+
         return entityManager.createQuery("select u from User u").getResultList();
     }
 

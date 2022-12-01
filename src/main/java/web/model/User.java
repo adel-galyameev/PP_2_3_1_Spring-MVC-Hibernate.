@@ -20,10 +20,10 @@ public class User {
 
     public User() {}
 
-    public User(String name, String surname, String department, int salary) {
+    public User(String name, String surname, String email) {
         this.name = name;
         this.surname = surname;
-        this.email = department;
+        this.email = email;
     }
 
     public int getId() {
