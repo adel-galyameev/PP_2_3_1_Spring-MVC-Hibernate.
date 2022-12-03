@@ -2,6 +2,7 @@ package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,7 @@ import web.model.User;
 import web.service.UserService;
 
 @Controller
-@RequestMapping("/users")
+
 public class UserController {
 
     private final UserService userService;
@@ -19,8 +20,7 @@ public class UserController {
         this.userService = userService;
     }
 
-
-    @GetMapping()
+    @RequestMapping("/users")
     public String getUsers(ModelMap model) {
 
         model.addAttribute("users", userService.listUsers());
@@ -34,31 +34,33 @@ public class UserController {
     }
 
 
-    @GetMapping("/new")
+    @RequestMapping("/newUser")
     public String newUser(Model model){
-        model.addAttribute("users", new User());
+        model.addAttribute("user", new User());
+
         return "new";
     }
 
-    @PostMapping
+
+    @RequestMapping("/userCreate")
     public String userCreate(@ModelAttribute("user") User user) {
         userService.add(user);
         return "redirect:/users";
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/edit/{id}")
     public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("user", userService.getUser(id));
         return "edit";
     }
 
-    @PatchMapping("/{id}")
+    @PostMapping( "/update/{id}")
     public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
         userService.update(id, user);
         return "redirect:/users";
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping ("/delete/{id}")
     public String delete(@PathVariable("id") int id) {
         userService.delete(id);
         return "redirect:/users";

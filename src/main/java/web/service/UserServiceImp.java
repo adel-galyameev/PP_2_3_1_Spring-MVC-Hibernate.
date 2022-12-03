@@ -39,6 +39,7 @@ public class UserServiceImp implements UserService{
         userDAO.delete(id);
     }
 
+    @Transactional
     @Override
     public void add(User user) {
         userDAO.add(user);

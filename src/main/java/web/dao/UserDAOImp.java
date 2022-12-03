@@ -18,7 +18,7 @@ public class UserDAOImp implements UserDAO {
     @SuppressWarnings("unchecked")
     public List<User> listUsers() {
 
-        return entityManager.createQuery("select u from User u").getResultList();
+        return entityManager.createQuery("select u from User u", User.class).getResultList();
     }
 
     @Override
@@ -28,6 +28,7 @@ public class UserDAOImp implements UserDAO {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void update(int id, User user) {
         String UPDATE = "UPDATE User u SET u.name = :name, u.surname = :surname, " +
                     "u.email = :email WHERE u.id = :id";
