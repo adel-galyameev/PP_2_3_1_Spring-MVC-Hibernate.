@@ -13,28 +13,20 @@ public class UserDAOImp implements UserDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-
     @Override
     @SuppressWarnings("unchecked")
     public List<User> listUsers() {
-
-        return entityManager.createQuery("select u from User u", User.class).getResultList();
+        return entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
     }
 
     @Override
     public User getUser(int id) {
-        return entityManager.createQuery("select u from User u where u.id = :id", User.class).
-                setParameter("id", id).getSingleResult();
+        return entityManager.find(User.class, id);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void update(int id, User user) {
-        String UPDATE = "UPDATE User u SET u.name = :name, u.surname = :surname, " +
-                    "u.email = :email WHERE u.id = :id";
-        entityManager.createQuery(UPDATE).setParameter("id", id).
-                setParameter("name", user.getName()).setParameter("surname", user.getSurname()).
-                setParameter("email", user.getEmail()).executeUpdate();
+    public void update(int id, User user) { entityManager.merge(user);
     }
 
     @Override
