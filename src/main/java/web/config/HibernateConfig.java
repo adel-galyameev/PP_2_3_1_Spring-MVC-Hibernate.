@@ -1,8 +1,11 @@
 package web.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -18,14 +21,18 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
+@PropertySource("classpath:db.properties")
 @ComponentScan(value = "web")
 public class HibernateConfig {
+
+    @Autowired
+    private Environment emv;
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em
                 = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(getDataSource());
-        em.setPackagesToScan("web.model");
+        em.setPackagesToScan(emv.getProperty("toScan"));
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());
@@ -36,10 +43,10 @@ public class HibernateConfig {
     @Bean
     public DataSource getDataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/users");
-        dataSource.setUsername( "bestuser1" );
-        dataSource.setPassword( "bestuser1" );
+        dataSource.setDriverClassName(emv.getProperty("db.driver"));
+        dataSource.setUrl(emv.getProperty("db.url"));
+        dataSource.setUsername(emv.getProperty("db.username"));
+        dataSource.setPassword(emv.getProperty("db.password"));
         return dataSource;
     }
 
@@ -58,8 +65,9 @@ public class HibernateConfig {
 
     Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+        properties.setProperty("hibernate.hbm2ddl.auto",emv.getProperty("hibernate.hbm2ddl.auto"));
+        properties.setProperty("hibernate.dialect", emv.getProperty("db.dialect"));
+        properties.setProperty("hibernate.show_sql", emv.getProperty("hibernate.show_sql"));
 
         return properties;
     }

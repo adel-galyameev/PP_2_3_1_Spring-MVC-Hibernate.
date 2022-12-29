@@ -13,10 +13,16 @@ public class UserDAOImp implements UserDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+
     @Override
     @SuppressWarnings("unchecked")
     public List<User> listUsers() {
         return entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
+    }
+
+    @Override
+    public void save(User user) {
+         entityManager.persist(user);
     }
 
     @Override
@@ -25,17 +31,14 @@ public class UserDAOImp implements UserDAO {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void update(int id, User user) { entityManager.merge(user);
+    public void update(User user) {
+        entityManager.merge(user);
     }
 
     @Override
     public void delete(int id) {
-        entityManager.remove(getUser(id));
+        User user = entityManager.find(User.class, id);
+        entityManager.remove(user);
     }
 
-    @Override
-    public void add(User user) {
-        entityManager.persist(user);
-    }
 }

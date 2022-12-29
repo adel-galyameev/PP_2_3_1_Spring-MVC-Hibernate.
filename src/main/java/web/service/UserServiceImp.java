@@ -11,37 +11,43 @@ import java.util.List;
 @Service
 public class UserServiceImp implements UserService{
 
+
+    private UserDAO userDAO;
     @Autowired
-    UserDAO userDAO;
+    public UserServiceImp (UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<User> listUsers() {
         return userDAO.listUsers();
     }
 
-    @Transactional
     @Override
+    @Transactional
+    public void save(User user) {
+        userDAO.save(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public User getUser(int id) {
         return userDAO.getUser(id);
     }
 
-    @Transactional
     @Override
-    public void update(int id, User user) {
-        userDAO.update(id, user);
+    @Transactional
+    public void update(User user) {
+        userDAO.update(user);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void delete(int id) {
         userDAO.delete(id);
     }
 
-    @Transactional
-    @Override
-    public void add(User user) {
-        userDAO.add(user);
-    }
+
 }

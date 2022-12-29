@@ -3,45 +3,39 @@
       xmlns:c="http://java.sun.com/xml/ns/javaee">
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Users</title>
-  <link rel="stylesheet" type="text/css"
-        th:href="@{/css/style.css}"/>
+  <meta charset="UTF-8">
+  <title>Users</title>
 </head>
 <body>
-<h1>Users</h1>
-<table border="1" >
-
+<h1>All Users</h1>
+<table border="1">
   <tr>
-    <th>Name</th>
-    <th>Surname</th>
-    <th>E-mail</th>
-    <th>Operations</th>
+    <th>id</th>
+    <th>name</th>
+    <th>age</th>
+    <th>email</th>
+    <th colspan="2">operations</th>
   </tr>
-
-
-  <tr th:each="user: ${users}">
-
-    <tr1>
-      <td th:utext="${user.getName()}"/>
-      <td th:utext="${user.getSurname()}"/>
-      <td th:utext="${user.getEmail()}"/>
-      <br>
-      <td>
-        <a th:href="@{/edit/{id}(id=${user.id})}">
-          <input type="submit" value="Edit">
-        </a>
-        <form th:method="DELETE" th:action="@{/delete/{id}(id=${user.id})}">
-          <input type="submit" value="Delete"/>
-        </form>
-      </td>
-
-    </tr1>
+  <tr th:each="user : ${users}">
+    <td th:text="${user.getId()}"></td>
+    <td th:text="${user.getName()}"></td>
+    <td th:text="${user.getAge()}"></td>
+    <td th:text="${user.getEmail()}"></td>
+    <td><a th:href="@{/users/{id}(id=${user.id})}">
+      <input type="submit" value="update">
+    </a>
+    </td>
+    <td>
+      <form th:method="DELETE" th:action="@{/users/{id}(id=${user.id})}">
+        <input type="submit" value="delete">
+      </form>
+    </td>
   </tr>
-
 </table>
-<br/>
-<input type="button" value="Add new user"
-  onclick="window.location.href = '/newUser'"/>
+
+<br>
+
+<input type="button" value="Add User"
+ onclick="window.location.href='users/new'"/>
+
 </body>
-</html>

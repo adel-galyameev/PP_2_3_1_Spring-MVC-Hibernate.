@@ -1,8 +1,6 @@
 package web.model;
 
 import javax.persistence.*;
-import java.util.Objects;
-
 @Entity
 @Table(name = "users")
 public class User {
@@ -10,15 +8,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column
     private String name;
-    private String surname;
+
+    @Column
+    private int age;
+
+    @Column
     private String email;
 
-    public User() {}
+    public User() {
+    }
 
-    public User(String name, String surname, String email) {
+    public User(String name, int age, String email) {
         this.name = name;
-        this.surname = surname;
+        this.age = age;
         this.email = email;
     }
 
@@ -38,12 +42,12 @@ public class User {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public int getAge() {
+        return age;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getEmail() {
@@ -53,26 +57,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, surname, email);
-    }
 }
+
+

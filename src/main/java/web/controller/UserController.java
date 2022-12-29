@@ -20,49 +20,41 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping("/users")
+    @GetMapping("/users")
     public String getUsers(ModelMap model) {
 
         model.addAttribute("users", userService.listUsers());
         return "users";
     }
+    @GetMapping("/users/new")
+    public String addNewUser(Model model) {
+        model.addAttribute("user",new User());
 
-    @GetMapping("/{id}")
-    public String getById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("users", userService.getUser(id));
-        return "user";
+        return "user_info";
+
     }
-
-
-    @RequestMapping("/newUser")
-    public String newUser(Model model){
-        model.addAttribute("user", new User());
-
-        return "new";
-    }
-
-
-    @RequestMapping("/userCreate")
-    public String userCreate(@ModelAttribute("user") User user) {
-        userService.add(user);
+    @PostMapping("/userAdd")
+    public String create(@ModelAttribute("user") User user) {
+        userService.save(user);
         return "redirect:/users";
     }
-
-    @GetMapping("/edit/{id}")
-    public String edit(Model model, @PathVariable("id") int id) {
+    @GetMapping("/users/{id}")
+    public String getUser(Model model,@PathVariable("id") int id) {
         model.addAttribute("user", userService.getUser(id));
-        return "edit";
+        return "updateUser";
     }
 
-    @PostMapping( "/update/{id}")
-    public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
-        userService.update(id, user);
+    @PatchMapping("/users/{id}")
+    public String update (@ModelAttribute("user") User user) {
+        userService.update(user);
         return "redirect:/users";
     }
 
-    @DeleteMapping ("/delete/{id}")
-    public String delete(@PathVariable("id") int id) {
+    @DeleteMapping("/users/{id}")
+    public String delete (@PathVariable("id") int id) {
         userService.delete(id);
         return "redirect:/users";
     }
+
+
 }
